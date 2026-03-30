@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+body{
+  background:#111;
+  color:white;
+  text-align:center;
+  font-family:Arial;
+}
+
+#reader{
+  width:250px;
+  margin:auto;
+}
+
+.alerta{
+  color:red;
+  font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🚻 Control de Baño</h2>
+
+<div id="reader"></div>
+
+<h3 id="nombre"></h3>
+<h3 id="contador"></h3>
+<h3 id="alerta" class="alerta"></h3>
+
+<script>
+
+const API="https://script.google.com/macros/s/XXXXX/exec";
+
+let qr=new Html5Qrcode("reader");
+
+qr.start(
+{facingMode:"environment"},
+{fps:10,qrbox:200},
+(texto)=>{
+
+fetch(API+"?codigo="+texto)
+.then(r=>r.json())
+.then(d=>{
+
+document.getElementById("nombre").innerHTML=d.nombre;
+document.getElementById("contador").innerHTML="Veces hoy: "+d.contador;
+document.getElementById("alerta").innerHTML=d.alerta || "";
+
+});
+
+}
+);
+
+</script>
+
+</body>
+</html>
